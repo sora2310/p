@@ -1,0 +1,29 @@
+name: Deploy to Firebase Hosting
+on:
+  push:
+    branches:
+      - main   # Cambia si tu rama principal se llama diferente
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Instalar dependencias y construir
+      - run: npm ci
+        working-directory: ./frontend   # Ajusta si tu frontend NO está en /frontend
+      - run: npm run build
+        working-directory: ./frontend
+
+      # Instalar Firebase CLI
+      - run: npm install -g firebase-tools
+
+      # Desplegar a Firebase Hosting
+      - run: firebase deploy --only hosting
+        working-directory: ./frontend
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
