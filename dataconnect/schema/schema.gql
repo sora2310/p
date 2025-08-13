@@ -1,0 +1,56 @@
+type User @table {
+  displayName: String!
+  createdAt: Timestamp!
+  totalPoints: Int!
+  email: String
+  photoUrl: String
+  phoneNumber: String
+}
+
+type DrivingSession @table {
+  user: User
+  startTime: Timestamp!
+  endTime: Timestamp!
+  distanceDriven: Float!
+  createdAt: Timestamp!
+  startLocation: String
+  endLocation: String
+  notes: String
+}
+
+type Reward @table {
+  name: String!
+  pointsCost: Int!
+  createdAt: Timestamp!
+  description: String
+  imageUrl: String
+  stockQuantity: Int
+}
+
+type Redemption @table {
+  user: User
+  reward: Reward
+  redemptionDate: Timestamp!
+  pointsUsed: Int!
+  status: String
+}
+
+type Challenge @table {
+  name: String!
+  description: String!
+  pointsAwarded: Int!
+  startDate: Timestamp!
+  endDate: Timestamp!
+  createdAt: Timestamp!
+  targetDistance: Float
+  targetSessions: Int
+}
+
+type UserChallenge @table(key: ["user", "challenge"]) {
+  user: User!
+  challenge: Challenge!
+  createdAt: Timestamp!
+  isCompleted: Boolean!
+  progress: Float
+  completionDate: Timestamp
+}
